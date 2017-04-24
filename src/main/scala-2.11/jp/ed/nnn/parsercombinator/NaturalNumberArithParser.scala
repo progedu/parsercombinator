@@ -11,7 +11,7 @@ object NaturalNumberArithParser extends MyFirstCombinator {
     case _ => digitExcludingZero
   }
 
-  def naturalNumber: Parser[Int] = map(combine(digitExcludingZero, rep(digitExcludingZero)), {
+  def naturalNumber: Parser[Int] = map(combine(digitExcludingZero, rep(digit)), {
     t: (String, List[String]) => (t._1 + t._2.mkString).toInt
   })
 
