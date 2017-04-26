@@ -2,23 +2,23 @@ package jp.ed.nnn.parsercombinator
 
 object JSONParser extends Combinator {
 
-  def obj: Parser[Map[String, Any]]  =
-    s("{") ~> repsep(member, s(",")) <~ s("}") ^^ { Map() ++ _ }
+  def obj: Parser[Map[String, Any]] =
+    (ss("{") ~> repsep(member, ss(",")) <~ ss("}") ^^ { t => Map() ++ t }) <~ spacing
 
   def arr: Parser[List[Any]] =
-    s("[") ~> repsep(value, s(",")) <~ s("]")
+    (ss("[") ~> repsep(value, ss(",")) <~ ss("]")) <~ spacing
 
   def member: Parser[(String, Any)] =
-    stringLiteral ~ s(":") ~ value ^^ { t => (t._1._1, t._2) }
+    ((stringLiteral <~ spacing) ~ ss(":") ~ value ^^ { t => (t._1._1, t._2) }) <~ spacing
 
   def value: Parser[Any] =
     obj |
       arr |
-      stringLiteral |
-      (floatingPointNumber ^^ { _.toDouble }) |
-      s("null") ^^  { _ => null } |
-      s("true") ^^  { _ => true } |
-      s("false") ^^  { _ => false }
+      stringLiteral <~ spacing |
+      (floatingPointNumber ^^ { t => t.toDouble }) <~ spacing |
+      ss("null") ^^ { _ => null } |
+      ss("true") ^^ { _ => true } |
+      ss("false") ^^ { _ => false }
 
   def apply(input: String): Any = value(input)
 
