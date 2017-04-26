@@ -20,6 +20,6 @@ object JSONParser extends Combinator {
       ss("true") ^^ { _ => true } |
       ss("false") ^^ { _ => false }
 
-  def apply(input: String): Any = value(input)
+  def apply(input: String): Any = (spacing ~> value)(input)
 
 }
