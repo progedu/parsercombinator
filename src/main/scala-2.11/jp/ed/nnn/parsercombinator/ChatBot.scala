@@ -9,11 +9,11 @@ sealed trait Command {
   def exec(input :String): Boolean
 }
 
-case class ReplyCommand(regex: Regex, replays: List[String]) extends Command {
+case class ReplyCommand(regex: Regex, replies: List[String]) extends Command {
   override def exec(input :String): Boolean = {
     regex.findFirstIn(input) match {
       case Some(_) =>
-        println(Random.shuffle(replays).head)
+        println(Random.shuffle(replies).head)
         true
       case None => false
     }
