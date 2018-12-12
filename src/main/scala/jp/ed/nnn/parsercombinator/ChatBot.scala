@@ -11,25 +11,25 @@ sealed trait Command {
   def exec(input :String): Boolean
 }
 
-case class ReplyCommand(regex: Regex, replays: List[String]) extends Command {
+case class ReplyCommand(regex: Regex, replies: List[String]) extends Command {
   override def exec(input :String): Boolean = {
     regex.findFirstIn(input) match {
       case Some(_) =>
-        println(Random.shuffle(replays).head)
+        println(Random.shuffle(replies).head)
         true
       case None => false
     }
   }
 }
 
-case class TimeCommand(regex: Regex, start: Int, end: Int, zone: String, replays: List[String])
+case class TimeCommand(regex: Regex, start: Int, end: Int, zone: String, replies: List[String])
   extends Command {
   override def exec(input: String): Boolean = {
     val now = LocalDateTime.now().atZone(ZoneId.of(zone))
     val isInTime = start <= now.getHour && now.getHour <= end
     regex.findFirstIn(input) match {
       case Some(_) if isInTime =>
-        println(Random.shuffle(replays).head)
+        println(Random.shuffle(replies).head)
         true
       case _ => false
     }
