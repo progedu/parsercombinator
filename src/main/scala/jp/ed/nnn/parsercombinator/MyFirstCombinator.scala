@@ -53,6 +53,25 @@ abstract class MyFirstCombinator {
     }
   }
 
+  def rep[T](parser: Parser[T]): Parser[List[T]] = input => {
+    def repRec(list: List[T]): Parser[List[T]] = next => {
+      if (next.length == 0) {
+        list match {
+          case List() => Failure
+          case _ => Success(list, "")
+        }
+      } else {
+        parser(next) match {
+          case Success(value, nex) => repRec(list :+ value)(nex)
+          case Failure => {
+            if(list.nonEmpty) Success(list, next) else Failure
+          }
+        }
+      }
+    }
+    repRec(List())(input)
+  }
+
   def map[T, U](parser: Parser[T], function: T => U): Parser[U] = input => {
     parser(input) match {
       case Success(value, next) => Success(function(value), next)
