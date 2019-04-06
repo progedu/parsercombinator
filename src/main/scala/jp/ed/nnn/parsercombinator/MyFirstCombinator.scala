@@ -67,6 +67,19 @@ abstract class MyFirstCombinator {
     Success(result, next)
   }
 
+  def rep[T](parser: Parser[T]): Parser[List[T]] = input => {
+
+    def repeatRec(input: String): (List[T], String) = parser(input) match {
+      case Success(value, next1) =>
+        val (result, next2) = repeatRec(next1)
+        (value::result, next2)
+      case Failure =>
+        (Nil, input)
+    }
+
+    val (result, next) = repeatRec(input)
+    Success(result, next)
+  }
 
   def map[T, U](parser: Parser[T], function: T => U): Parser[U] = input => {
     parser(input) match {
