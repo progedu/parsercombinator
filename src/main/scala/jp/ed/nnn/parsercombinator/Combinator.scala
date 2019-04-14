@@ -23,6 +23,24 @@ abstract class Combinator {
     */
   def s(literal: String): Parser[String] = string(literal)
 
+  def oneOf(chars: Seq[Char]): Parser[String] = input => {
+    if(input.length != 0
+      && chars.contains(input.head)) {
+      Success(input.head.toString, input.tail)
+    } else {
+      Failure
+    }
+  }
+
+  def spacing: Parser[String] = rep(oneOf(Seq(' ', '\t', '\r', '\n'))) ^^ { _.mkString }
+
+  /**
+    * string parser with spacing
+    * @param literal 文字列
+    * @return
+    */
+  def ss(literal: String): Parser[String] = spacing ~> s(literal) <~ spacing
+
   def rep[T](parser: => Parser[T]): Parser[List[T]] = input => {
 
     def repeatRec(input: String): (List[T], String) = parser(input) match {
