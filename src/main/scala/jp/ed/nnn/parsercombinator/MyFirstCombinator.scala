@@ -66,7 +66,7 @@ abstract class MyFirstCombinator {
     @tailrec
     def loop(input: String, parser: Parser[T], acc: List[T]): ParseResult[List[T]] = parser(input) match {
       case Success(value, next) => loop(next, parser, value::acc)
-      case Failure => if (acc == Nil) Failure else Success(acc.reverse, input)
+      case Failure => Success(acc.reverse, input)
     }
 
     input => loop(input, parser, Nil: List[T])
