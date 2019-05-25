@@ -1,5 +1,7 @@
 package jp.ed.nnn.parsercombinator
 
+import scala.annotation.tailrec
+
 abstract class MyFirstCombinator {
 
   sealed trait ParseResult[+T]
@@ -60,4 +62,13 @@ abstract class MyFirstCombinator {
     }
   }
 
+  def rep[T](parser: Parser[T]): Parser[List[T]] = {
+    @tailrec
+    def loop(input: String, parser: Parser[T], acc: List[T]): ParseResult[List[T]] = parser(input) match {
+      case Success(value, next) => loop(next, parser, value::acc)
+      case Failure => Success(acc.reverse, input)
+    }
+
+    input => loop(input, parser, Nil: List[T])
+  }
 }
