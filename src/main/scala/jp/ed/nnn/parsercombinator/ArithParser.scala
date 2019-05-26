@@ -4,7 +4,7 @@ object ArithParser extends Combinator {
 
   def term: Parser[Any] = factor ~ rep(s("*") ~ factor | s("/") ~ factor)
 
-  def factor: Parser[Any] = floatingPointNumber | s("(") ~> expr <~ s(")")
+  def factor: Parser[Any] = floatingPointNumber | s("(") ~ expr ~ s(")")
 
   def expr: Parser[Any] = term ~ rep(s("+") ~ term | s("-") ~ term)
 
