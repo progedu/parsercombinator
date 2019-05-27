@@ -23,6 +23,10 @@ abstract class Combinator {
     */
   def s(literal: String): Parser[String] = string(literal)
 
+  def spacing: Parser[List[String]] = rep(s(" ") | s("\t") | s("\n") | s("\r"))
+
+  def ss(literal: String): Parser[String] = s(literal) <~ spacing
+
   def rep[T](parser: => Parser[T]): Parser[List[T]] = input => {
 
     def repeatRec(input: String): (List[T], String) = parser(input) match {
