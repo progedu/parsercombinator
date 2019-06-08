@@ -2,7 +2,7 @@ package jp.ed.nnn.parsercombinator
 
 case class DigitSequence(seq: Seq[String])
 
-class DigitSequenceParser extends MyFirstCombinator {
+object DigitSequenceParser extends MyFirstCombinator {
   def digit: Parser[String] = oneOf('0' to '9')
 
   def apply(input: String): ParseResult[DigitSequence] =

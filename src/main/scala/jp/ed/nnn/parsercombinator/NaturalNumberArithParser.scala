@@ -2,7 +2,7 @@ package jp.ed.nnn.parsercombinator
 
 case class NaturalNumberArith(num: Int, terms: List[(String, Int)])
 
-class NaturalNumberArithParser extends MyFirstCombinator {
+object NaturalNumberArithParser extends MyFirstCombinator {
   def digitExcludingZero: Parser[String] = oneOf('1' to '9')
 
   def digit: Parser[String] = select(s("0"), digitExcludingZero)

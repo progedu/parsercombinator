@@ -2,7 +2,7 @@ package jp.ed.nnn.parsercombinator
 
 case class FullClassName(grade: String, className: String)
 
-class FullClassNameParser extends MyFirstCombinator {
+object FullClassNameParser extends MyFirstCombinator {
   def grade: Parser[String] = oneOf('1' to '3')
 
   def className: Parser[String] = oneOf('A' to 'D')
