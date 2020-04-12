@@ -1,5 +1,6 @@
 package jp.ed.nnn.parsercombinator
 
+
 abstract class MyFirstCombinator {
 
   sealed trait ParseResult[+T]
@@ -31,6 +32,17 @@ abstract class MyFirstCombinator {
       Failure
     }
   }
+
+  def rep[T](parser: Parser[T]): Parser[List[T]] = input => {
+    def recParser(parser: Parser[T], list: List[T]) : Parser[List[T]] = input => {
+      parser(input) match {
+        case Failure => Success(list, input)
+        case Success(parsed, tail) => recParser(parser, list :+ parsed)(tail)
+      }
+    }
+    recParser(parser, List())(input)
+  }
+
 
   def select[T, U >: T](left: Parser[T], right: Parser[U]): Parser[U] = input => {
     left(input) match {
