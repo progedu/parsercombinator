@@ -18,6 +18,5 @@ object FullClassNameParser extends MyFirstCombinator {
     ), {
       t: (((String, String), String), String) => FullClassName(t._1._1._1, t._1._2)
     })(input)
-
+// test
 }
-
